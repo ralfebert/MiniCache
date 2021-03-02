@@ -202,7 +202,7 @@ public class MiniCacheManager {
             #if DEBUG
             fatalError(msg)
             #else
-            os_log("MiniCache threading error: %@", log: self.cache.log, type: .error, msg)
+            os_log("MiniCache threading error: %@", log: self.log, type: .error, msg)
             #endif
         }
     }
@@ -212,7 +212,7 @@ public class MiniCacheManager {
         #if DEBUG
         fatalError("MiniCache error: \(error)")
         #else
-        os_log("MiniCache error: %@", log: self.cache.log, type: .error, String(describing: error))
+        os_log("MiniCache error: %@", log: self.log, type: .error, String(describing: error))
         #endif
     }
 
