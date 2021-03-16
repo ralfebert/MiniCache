@@ -72,6 +72,23 @@ final class MiniCacheTests: XCTestCase {
         XCTAssertNil(storage["Counter"])
     }
 
+    func testExpirationAgeCachesSeparate() {
+        let longStorage: MiniCache<String, Int> = self.cacheManager.cache(cacheName: "LongStorage", cacheVersion: .appVersion, maxAge: .days(1))
+        let shortStorage: MiniCache<String, Int> = self.cacheManager.cache(cacheName: "ShortStorage", cacheVersion: .appVersion, maxAge: .hours(1))
+        let date = Date()
+        cacheManager.clock = { date }
+        longStorage["Foo"] = 1
+        shortStorage["Bar"] = 2
+        XCTAssertEqual(1, longStorage["Foo"])
+        XCTAssertEqual(2, shortStorage["Bar"])
+        self.cacheManager.clock = { date.addingTimeInterval(2 * 60 * 60) }
+        XCTAssertNil(shortStorage["Bar"])
+        XCTAssertEqual(1, longStorage["Foo"])
+        self.cacheManager.clock = { date.addingTimeInterval(25 * 60 * 60) }
+        XCTAssertNil(shortStorage["Bar"])
+        XCTAssertNil(longStorage["Foo"])
+    }
+
     func testExpirationVersion() {
         var storage: MiniCache<String, Int> = self.cacheManager.cache(cacheName: "Counter", cacheVersion: .appVersion, maxAge: .days(7))
         storage["Counter"] = 1

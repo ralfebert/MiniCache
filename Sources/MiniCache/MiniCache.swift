@@ -101,7 +101,7 @@ public class MiniCache<Key: Codable, Value: Codable> {
 
     private func purgeExpiredEntries() {
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: CacheEntry.entityName)
-        request.predicate = NSPredicate(format: "(cache == %@ && cacheVersion != %@) || %@ > date", self.cacheName, self.cacheVersion.versionString, self.cacheManager.clock().addingTimeInterval(-self.maxAge.timeInterval) as NSDate)
+        request.predicate = NSPredicate(format: "cache == %@ && (cacheVersion != %@ || %@ > date)", self.cacheName, self.cacheVersion.versionString, self.cacheManager.clock().addingTimeInterval(-self.maxAge.timeInterval) as NSDate)
         self.cacheManager.withErrorHandling {
             _ = try self.cacheManager.managedObjectContext.execute(NSBatchDeleteRequest(fetchRequest: request))
         }
