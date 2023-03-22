@@ -143,7 +143,6 @@ public class MiniCacheManager {
                     .attribute(name: "date", type: .dateAttributeType),
                 ],
                 indexes: [
-                    .index(name: "cache", elements: [.property(name: "cache"), .property(name: "key")]),
                     .index(name: "cacheKey", elements: [.property(name: "cache"), .property(name: "key")]),
                 ]
 
