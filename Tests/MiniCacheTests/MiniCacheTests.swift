@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2021 Ralf Ebert
+// Copyright (c) 2023 Ralf Ebert
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -64,7 +64,7 @@ final class MiniCacheTests: XCTestCase {
     func testExpirationAge() {
         let storage: MiniCache<String, Int> = self.cacheManager.cache(cacheName: "Counter", cacheVersion: .appVersion, maxAge: .hours(5))
         let date = Date()
-        cacheManager.clock = { date }
+        self.cacheManager.clock = { date }
         storage["Counter"] = 1
         self.cacheManager.clock = { date.addingTimeInterval(1 * 60 * 60) }
         XCTAssertEqual(1, storage["Counter"])
@@ -76,7 +76,7 @@ final class MiniCacheTests: XCTestCase {
         let longStorage: MiniCache<String, Int> = self.cacheManager.cache(cacheName: "LongStorage", cacheVersion: .appVersion, maxAge: .days(1))
         let shortStorage: MiniCache<String, Int> = self.cacheManager.cache(cacheName: "ShortStorage", cacheVersion: .appVersion, maxAge: .hours(1))
         let date = Date()
-        cacheManager.clock = { date }
+        self.cacheManager.clock = { date }
         longStorage["Foo"] = 1
         shortStorage["Bar"] = 2
         XCTAssertEqual(1, longStorage["Foo"])
