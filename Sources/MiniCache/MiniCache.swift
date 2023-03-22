@@ -123,10 +123,19 @@ public class MiniCacheManager {
     let log: OSLog
     var clock = { Date() }
 
-    public init(name: String, ownerThread: Thread = Thread.current) {
+    /// Creates a new MiniCacheManager.
+    ///
+    /// - Parameters:
+    ///   - name: Name of the cache manager. Used as name for the database file - allows to have multiple, separate cache managers in the same app.
+    ///   - ownerThread: Only this thread is allowed to use the caches.
+    ///   - persistentContainer: Optionally, you can pass your own persistentContainer. This needs to have set up a 'CacheEntry' entity in the same way as in this package (see MiniCacheManager.managedObjectModel)
+    public init(name: String, ownerThread: Thread = Thread.current, persistentContainer: NSPersistentContainer? = nil) {
         self.name = name
         self.ownerThread = ownerThread
         self.log = OSLog(subsystem: "MiniCache", category: self.name)
+        if let persistentContainer {
+            self.persistentContainer = persistentContainer
+        }
         self.checkThread()
     }
 
